@@ -1,0 +1,37 @@
+server:
+  port: 8080
+
+
+eureka:
+  client:
+    fetch-registry: true
+    register-ith-eureka: true
+    service-url:
+      default-zone: http://localhost:8761/eureka
+  instance:
+    hostname: localhost
+    
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enable: true
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+      routes:
+        - id: RIPS-SERVICE
+          uri: lb://RIPS-SERVICE
+          predicates:
+            - Path=/api/correo-reportes/**, /api/reportes/**
+        - id: traza-service
+          uri: lb://traza-service
+          predicates:
+            - Path=/traza/**
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
